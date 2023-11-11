@@ -1,1 +1,1 @@
-# Correlacão e Regressão
+# estatística

@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.legis-tooltip {
+  @apply absolute rounded shadow-xl bg-gray-600 text-gray-100 hidden p-2 w-fit max-w-prose transition-all
+}
+
+.legis-tooltip__arrow {
+  @apply absolute shadow-xl bg-gray-600 text-gray-100 w-2 h-2 rotate-45 transition-all
+}
+
+html {
+  overflow-x: hidden;
+}
+
+/* TRANSITIONS */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.7s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-from-right-enter-active,
+.slide-from-right-leave-active {
+  transition: all .7s ease;
+}
+.slide-from-right-enter-from, .slide-from-right-leave-to {
+  transform: translateX(100%);
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.clickable {
+  cursor: pointer;
+}
