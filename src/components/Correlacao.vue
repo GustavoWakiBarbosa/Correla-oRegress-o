@@ -80,7 +80,6 @@ onMounted(() => {
   });
 
   chart = new Chart(canvas, config.value);
-  console.log("vendo dicas", data.value.datasets);
 });
 
 function isEmpty() {
@@ -92,17 +91,21 @@ function isEmpty() {
       empty = false;
     }
   });
-  if (empty == true) {
-    data.value.datasets[0].data = linhas.value;
-    const linhasNumber = linhas.value.map((linha) => ({
-      x: Number(linha.x),
-      y: Number(linha.y),
-    }));
-    data.value.datasets[1].data = calculateBestFitLine(linhasNumber);
-    chart.update();
-    console.log("vendo dicas", data.value.datasets);
+  if (isEmpty == false) {
+    changeGraphich();
   }
   return empty;
+}
+
+function changeGraphich() {
+  data.value.datasets[0].data = linhas.value;
+  const linhasNumber = linhas.value.map((linha) => ({
+    x: Number(linha.x),
+    y: Number(linha.y),
+  }));
+  data.value.datasets[1].data = calculateBestFitLine(linhasNumber);
+  chart.update();
+  console.log("vendo dicas", data.value.datasets);
 }
 
 function transformLines() {
@@ -150,11 +153,20 @@ watchEffect(() => {
   cftInclinacao.value = slope();
   cftRegressao.value = correl();
   cftLinear.value = intercept();
-  retaRegressao.value = `Y = ${cftInclinacao.value}X + ${cftLinear.value}`;
+  if (isEmpty() == false && linhas.value.length > 0) {
+    changeGraphich();
+    retaRegressao.value = `Y = ${cftInclinacao.value}X + ${cftLinear.value}`;
+  }
   if (!isEmpty() && estimate.value[0] != "") {
     estimate.value[2] = (
       Number(cftInclinacao.value) * Number(estimate.value[0]) +
       Number(cftLinear.value)
+    ).toFixed(4);
+  }
+  if (!isEmpty() && estimate.value[1] != "") {
+    estimate.value[3] = (
+      (Number(estimate.value[1]) - Number(cftLinear.value)) /
+      Number(cftInclinacao.value)
     ).toFixed(4);
   }
 });
@@ -230,7 +242,7 @@ watchEffect(() => {
                 id="rows"
                 v-model="estimate[0]"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Flowbite"
+                placeholder=""
                 required
               />
               <p class="text-edx-primary-50 mt-2">{{ estimate[2] }}</p>
@@ -246,7 +258,7 @@ watchEffect(() => {
                 id="rows"
                 v-model="estimate[1]"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Flowbite"
+                placeholder=""
                 required
               />
               <p class="text-edx-primary-50 mt-2">{{ estimate[3] }}</p>
@@ -270,10 +282,13 @@ watchEffect(() => {
       </div>
     </div>
 
-    <div v-if="!infoEmpty" class="relative overflow-x-auto">
+    <div
+      v-if="!infoEmpty"
+      class="relative overflow-x-auto animate-fade-up animate-once animate-ease-in-out animate-normal animate-fill-forwards"
+    >
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead
-          class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+          class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[#374151] dark:text-gray-400"
         >
           <tr>
             <th
@@ -290,7 +305,7 @@ watchEffect(() => {
           <tr
             v-for="(linha, index) in linhas"
             :key="index"
-            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+            class="bg-white border-b dark:bg-[#111827] dark:border-[#374151]"
           >
             <th
               scope="row"
@@ -298,7 +313,7 @@ watchEffect(() => {
             >
               <input
                 type="text"
-                class="text-center dark:bg-gray-800 dark:border-gray-700"
+                class="text-center dark:bg-[#111827] dark:border-[#374151]"
                 v-model="linhas[index].x"
               />
             </th>
@@ -308,7 +323,7 @@ watchEffect(() => {
             >
               <input
                 type="text"
-                class="text-center dark:bg-gray-800 dark:border-gray-700"
+                class="text-center dark:bg-[#111827] dark:border-[#374151]"
                 v-model="linhas[index].y"
               />
             </th>

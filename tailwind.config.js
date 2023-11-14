@@ -120,6 +120,7 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/typography'),
+    require('tailwindcss-animated'),
     require('daisyui'),
     plugin(function({ addVariant }) {
       addVariant(
