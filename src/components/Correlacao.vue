@@ -16,90 +16,30 @@ const retaRegressao = ref();
 const x = ref([]);
 const y = ref([]);
 
-function isEmpty() {
-  let empty = false;
-  linhas.value.forEach((e) => {
-    if (e.x == "" || e.y == "") {
-      empty = true;
-    } else {
-      empty = false;
-    }
-  });
-  return empty;
-}
-
-function transformLines() {
-  x.value = [];
-  y.value = [];
-  for (let i = 0; i < linhas.value.length; i++) {
-    x.value.push(Number(linhas.value[i].x));
-    y.value.push(Number(linhas.value[i].y));
-  }
-}
-
-function slope() {
-  if (isEmpty() == false) {
-    transformLines();
-    var pontos = x.value.map((x, i) => [x, y.value[i]]);
-    var resultado = regression.linear(pontos);
-    return resultado.equation[0].toFixed(4);
-  }
-}
-
-function correl() {
-  if (isEmpty() == false) {
-    transformLines();
-    try {
-      const correlation = calculateCorrelation(x.value, y.value) ** 2;
-      return correlation.toFixed(4);
-    } catch {
-      console.log("erro");
-    }
-  }
-}
-
-function intercept() {
-  if (isEmpty() == false) {
-    transformLines();
-    let xMean = x.value.reduce((a, b) => a + b, 0) / x.value.length;
-    let yMean = y.value.reduce((a, b) => a + b, 0) / y.value.length;
-    let b = yMean - cftInclinacao.value * xMean;
-    b = b.toFixed(4);
-    return b;
-  }
-}
-
-watchEffect(() => {
-  cftInclinacao.value = slope();
-  cftRegressao.value = correl();
-  cftLinear.value = intercept();
-  retaRegressao.value = `Y = ${cftInclinacao.value}X + ${cftLinear.value}`;
-  if (!isEmpty() && estimate.value[0] != "") {
-    estimate.value[2] = (
-      Number(cftInclinacao.value) * Number(estimate.value[0]) +
-      Number(cftLinear.value)
-    ).toFixed(4);
-  }
-  if (!isEmpty) {
-    const newData = linhas.value.map((e) => ({
-      x: parseFloat(e.x),
-      y: parseFloat(e.y),
-    }));
-    chart.data.datasets[0].data = newData;
-    chart.update();
-  }
-});
-
-watchEffect(() => {
-  linhas.value = [];
-  for (let i = 0; i < numRows.value; i++) {
-    linhas.value.push({ x: "", y: "" });
-    infoEmpty.value = false;
-  }
-});
-
 let chart;
 const canvasRef = ref(null);
+const data = ref({
+  datasets: [
+    {
+      label: "Pontos",
+      data: [],
+      backgroundColor: "#203aec", // Define a cor dos pontos para azul claro.
+    },
+  ],
+});
+
+const config = ref({
+  type: "scatter",
+  data: data.value,
+  options: {
+    scales: {
+      x: {
+        type: "linear",
+        position: "bottom",
+      },
+    },
+  },
+});
 
 // Função para calcular a linha de melhor ajuste
 function calculateBestFitLine(data) {
@@ -126,137 +66,210 @@ function calculateBestFitLine(data) {
 onMounted(() => {
   const canvas = canvasRef.value;
 
-  const data = {
-    datasets: [
-      {
-        label: "Pontos",
-        data: [
-          {
-            x: -10,
-            y: 0,
-          },
-          {
-            x: 0,
-            y: 10,
-          },
-          {
-            x: 10,
-            y: 5,
-          },
-        ],
-        backgroundColor: "#203aec", // Define a cor dos pontos para azul claro.
-      },
-    ],
-  };
-
   // Calcule a linha de melhor ajuste e adicione ao conjunto de dados
-  const bestFitLine = calculateBestFitLine(data.datasets[0].data);
-  data.datasets.push({
+  const bestFitLine = calculateBestFitLine(data.value.datasets[0].data);
+  data.value.datasets.push({
     type: "line",
     label: "Linha",
     data: bestFitLine,
-    borderColor: "#4d61f0", // A linha será vermelha.
+    borderColor: "#4d61f0",
     borderWidth: 1,
     fill: false,
     showLine: true,
-    pointRadius: 0, // Não mostre pontos individuais para a linha de melhor ajuste.
+    pointRadius: 0,
   });
 
-  const config = {
-    type: "scatter",
-    data: data,
-    options: {
-      scales: {
-        x: {
-          type: "linear",
-          position: "bottom",
-        },
-      },
-    },
-  };
+  chart = new Chart(canvas, config.value);
+  console.log("vendo dicas", data.value.datasets);
+});
 
-  chart = new Chart(canvas, config);
+function isEmpty() {
+  let empty = false;
+  linhas.value.forEach((e) => {
+    if (e.x == "" || e.y == "") {
+      empty = true;
+    } else {
+      empty = false;
+    }
+  });
+  if (empty == true) {
+    data.value.datasets[0].data = linhas.value;
+    const linhasNumber = linhas.value.map((linha) => ({
+      x: Number(linha.x),
+      y: Number(linha.y),
+    }));
+    data.value.datasets[1].data = calculateBestFitLine(linhasNumber);
+    chart.update();
+    console.log("vendo dicas", data.value.datasets);
+  }
+  return empty;
+}
+
+function transformLines() {
+  x.value = [];
+  y.value = [];
+  for (let i = 0; i < linhas.value.length; i++) {
+    x.value.push(Number(linhas.value[i].x));
+    y.value.push(Number(linhas.value[i].y));
+  }
+}
+
+function slope() {
+  if (isEmpty() == false && linhas.value.length > 0) {
+    transformLines();
+    var pontos = x.value.map((x, i) => [x, y.value[i]]);
+    var resultado = regression.linear(pontos);
+    return resultado.equation[0].toFixed(4);
+  }
+}
+
+function correl() {
+  if (isEmpty() == false && linhas.value.length > 0) {
+    transformLines();
+    try {
+      const correlation = calculateCorrelation(x.value, y.value) ** 2;
+      return correlation.toFixed(4);
+    } catch {
+      console.log("erro");
+    }
+  }
+}
+
+function intercept() {
+  if (isEmpty() == false && linhas.value.length > 0) {
+    transformLines();
+    let xMean = x.value.reduce((a, b) => a + b, 0) / x.value.length;
+    let yMean = y.value.reduce((a, b) => a + b, 0) / y.value.length;
+    let b = yMean - cftInclinacao.value * xMean;
+    b = b.toFixed(4);
+    return b;
+  }
+}
+
+watchEffect(() => {
+  cftInclinacao.value = slope();
+  cftRegressao.value = correl();
+  cftLinear.value = intercept();
+  retaRegressao.value = `Y = ${cftInclinacao.value}X + ${cftLinear.value}`;
+  if (!isEmpty() && estimate.value[0] != "") {
+    estimate.value[2] = (
+      Number(cftInclinacao.value) * Number(estimate.value[0]) +
+      Number(cftLinear.value)
+    ).toFixed(4);
+  }
+});
+
+watchEffect(() => {
+  linhas.value = [];
+  for (let i = 0; i < numRows.value; i++) {
+    linhas.value.push({ x: "", y: "" });
+    infoEmpty.value = false;
+  }
 });
 </script>
 
 <template>
   <div class="px-20 py-20 bg-container flex gap-10 items-center justify-center">
     <div class="flex flex-col gap-4">
-      <div class="flex flex-col">
-        <div class="flex gap-2">
-          <label for="rows" class="text-edx-primary-50"
-            >Número de linhas:</label
-          >
-          <input
-            type="number"
-            id="rows"
-            v-model="numRows"
-            class="max-w-[8.5rem]"
-          />
-        </div>
-        <div class="flex flex-col gap-4 mt-4">
-          <div class="flex gap-2">
-            <label for="rows" class="text-edx-primary-50">Nome coluna X:</label>
+      <div class="bg-[#111827] p-8 rounded-2xl">
+        <form>
+          <div class="mb-6">
+            <label
+              for="email"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Número de linhas:</label
+            >
             <input
-              type="text"
+              type="number"
               id="rows"
-              v-model="colunas[0]"
-              class="max-w-[8.5rem]"
+              v-model="numRows"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Digite um número inteiro"
+              required
             />
           </div>
-          <div class="flex gap-2">
-            <label for="rows" class="text-edx-primary-50">Nome coluna Y:</label>
-            <input
-              type="text"
-              id="rows"
-              v-model="colunas[1]"
-              class="max-w-[8.5rem]"
-            />
-          </div>
-          <div class="flex flex-col">
-            <div class="flex gap-2 mt-4">
-              <label for="rows" class="text-edx-primary-50"
+          <div class="grid gap-6 md:grid-cols-2">
+            <div>
+              <label
+                for="rows"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Nome coluna X:</label
+              >
+              <input
+                type="text"
+                id="rows"
+                v-model="colunas[0]"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="X"
+                required
+              />
+            </div>
+            <div>
+              <label
+                for="rows"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Nome coluna Y:</label
+              >
+              <input
+                type="text"
+                id="rows"
+                v-model="colunas[1]"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Y"
+                required
+              />
+            </div>
+            <div>
+              <label
+                for="rows"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >Estime {{ colunas[0] }} cujo {{ colunas[1] }} é:</label
               >
               <input
                 type="text"
                 id="rows"
                 v-model="estimate[0]"
-                class="max-w-[8.5rem]"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Flowbite"
+                required
               />
+              <p class="text-edx-primary-50 mt-2">{{ estimate[2] }}</p>
             </div>
-            <p class="text-edx-primary-50">{{ estimate[2] }}</p>
-          </div>
-          <div class="flex flex-col">
-            <div class="flex gap-2">
-              <label for="rows" class="text-edx-primary-50"
+            <div>
+              <label
+                for="rows"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >Estime {{ colunas[1] }} cujo {{ colunas[0] }} é:</label
               >
               <input
                 type="text"
                 id="rows"
                 v-model="estimate[1]"
-                class="max-w-[8.5rem]"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Flowbite"
+                required
               />
+              <p class="text-edx-primary-50 mt-2">{{ estimate[3] }}</p>
             </div>
-            <p class="text-edx-primary-50">{{ estimate[3] }}</p>
           </div>
-        </div>
-
-        <p class="text-edx-primary-50 mt-8">
+        </form>
+      </div>
+      <div class="bg-[#111827] p-8 rounded-2xl mt-4">
+        <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Coeficiente de Inclinação: {{ cftInclinacao }}
         </p>
-        <p class="text-edx-primary-50 mt-4">
+        <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Coeficiente de Regressão: {{ cftRegressao }}
         </p>
-        <p class="text-edx-primary-50 mt-4">
+        <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Coeficiente Linear: {{ cftLinear }}
         </p>
-        <p class="text-edx-primary-50 mt-4">
+        <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Reta de Regressão ( Y = aX + b ): {{ retaRegressao }}
         </p>
       </div>
     </div>
+
     <div v-if="!infoEmpty" class="relative overflow-x-auto">
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead
