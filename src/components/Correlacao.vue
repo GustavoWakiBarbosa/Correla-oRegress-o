@@ -15,6 +15,7 @@ const cftLinear = ref();
 const retaRegressao = ref();
 const x = ref([]);
 const y = ref([]);
+const isMobile = ref(false);
 
 let chart;
 const canvasRef = ref(null);
@@ -64,6 +65,9 @@ function calculateBestFitLine(data) {
 }
 
 onMounted(() => {
+  if (window.innerWidth < 768) {
+    isMobile.value = true;
+  }
   const canvas = canvasRef.value;
 
   // Calcule a linha de melhor ajuste e adicione ao conjunto de dados
@@ -182,9 +186,10 @@ watchEffect(() => {
 
 <template>
   <div
-    class="px-20 py-20 bg-container flex-col lg:flex-row flex gap-10 items-center justify-center"
+    class="px-6 lg:px-20 py-20 bg-container flex-col lg:flex-row flex gap-10 items-center justify-center"
+    :class="isMobile ? '' : 'h-screen'"
   >
-    <div class="flex flex-col gap-4">
+    <div class="w-full lg:w-auto flex flex-col gap-4">
       <div class="bg-[#111827] p-8 rounded-2xl">
         <form>
           <div class="mb-6">
@@ -349,7 +354,6 @@ watchEffect(() => {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  width: 100%;
 }
 /* 
 @media (max-width: 767px) {
