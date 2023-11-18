@@ -175,11 +175,22 @@ watchEffect(() => {
   }
 });
 
+let mudancaInterna = false;
+
 watchEffect(() => {
-  linhas.value = [];
-  for (let i = 0; i < numRows.value; i++) {
-    linhas.value.push({ x: "", y: "" });
-    infoEmpty.value = false;
+  console.log(linhas.value);
+  if (numRows.value != 0) {
+    const diff = numRows.value - linhas.value.length;
+    let tempLinhas = [...linhas.value]; // Cria uma cópia de linhas.value
+    if (diff > 0) {
+      for (let i = 0; i < diff; i++) {
+        tempLinhas.push({ x: "", y: "" });
+      }
+    } else if (diff < 0) {
+      tempLinhas.splice(numRows.value);
+    }
+    linhas.value = tempLinhas; // Atualiza linhas.value com os novos valores
+    infoEmpty.value = linhas.value.length === 0;
   }
 });
 </script>
