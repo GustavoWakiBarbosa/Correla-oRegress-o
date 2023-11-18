@@ -181,7 +181,9 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="px-20 py-20 bg-container flex gap-10 items-center justify-center">
+  <div
+    class="px-20 py-20 bg-container flex-col lg:flex-row flex gap-10 items-center justify-center"
+  >
     <div class="flex flex-col gap-4">
       <div class="bg-[#111827] p-8 rounded-2xl">
         <form>
@@ -235,7 +237,7 @@ watchEffect(() => {
               <label
                 for="rows"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Estime {{ colunas[0] }} cujo {{ colunas[1] }} é:</label
+                >Estime {{ colunas[1] }} cujo {{ colunas[0] }} é:</label
               >
               <input
                 type="text"
@@ -251,7 +253,7 @@ watchEffect(() => {
               <label
                 for="rows"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Estime {{ colunas[1] }} cujo {{ colunas[0] }} é:</label
+                >Estime {{ colunas[0] }} cujo {{ colunas[1] }} é:</label
               >
               <input
                 type="text"
@@ -282,58 +284,61 @@ watchEffect(() => {
       </div>
     </div>
 
-    <div
-      v-if="!infoEmpty"
-      class="relative overflow-x-auto animate-fade-up animate-once animate-ease-in-out animate-normal animate-fill-forwards"
-    >
-      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead
-          class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[#374151] dark:text-gray-400"
+    <div class="flex flex-col 2xl:flex-row gap-10">
+      <div
+        v-if="!infoEmpty"
+        class="relative overflow-x-auto animate-fade-up animate-once animate-ease-in-out animate-normal animate-fill-forwards"
+      >
+        <table
+          class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
         >
-          <tr>
-            <th
-              v-for="(coluna, index) in colunas"
-              :key="index"
-              scope="col"
-              class="text-center px-6 py-3 text-edx-primary-50"
-            >
-              {{ coluna }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(linha, index) in linhas"
-            :key="index"
-            class="bg-white border-b dark:bg-[#111827] dark:border-[#374151]"
+          <thead
+            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[#374151] dark:text-gray-400"
           >
-            <th
-              scope="row"
-              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            <tr>
+              <th
+                v-for="(coluna, index) in colunas"
+                :key="index"
+                scope="col"
+                class="text-center px-6 py-3 text-edx-primary-50"
+              >
+                {{ coluna }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(linha, index) in linhas"
+              :key="index"
+              class="bg-white border-b dark:bg-[#111827] dark:border-[#374151]"
             >
-              <input
-                type="text"
-                class="text-center dark:bg-[#111827] dark:border-[#374151]"
-                v-model="linhas[index].x"
-              />
-            </th>
-            <th
-              scope="row"
-              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              <input
-                type="text"
-                class="text-center dark:bg-[#111827] dark:border-[#374151]"
-                v-model="linhas[index].y"
-              />
-            </th>
-          </tr>
-        </tbody>
-      </table>
-      <div></div>
-    </div>
-    <div class="p-4 w-[500px] bg-edx-primary-50 rounded-md">
-      <canvas ref="canvasRef"></canvas>
+              <th
+                scope="row"
+                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+                <input
+                  type="text"
+                  class="text-center dark:bg-[#111827] dark:border-[#374151]"
+                  v-model="linhas[index].x"
+                />
+              </th>
+              <th
+                scope="row"
+                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+                <input
+                  type="text"
+                  class="text-center dark:bg-[#111827] dark:border-[#374151]"
+                  v-model="linhas[index].y"
+                />
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="p-4 md:w-[500px] max-h-[266px] bg-edx-primary-50 rounded-md">
+        <canvas ref="canvasRef"></canvas>
+      </div>
     </div>
   </div>
 </template>
@@ -345,6 +350,11 @@ watchEffect(() => {
   background-position: center;
   background-repeat: no-repeat;
   width: 100%;
-  height: 100vh;
 }
+/* 
+@media (max-width: 767px) {
+  .bg-container {
+    height: 100vh;
+  }
+} */
 </style>

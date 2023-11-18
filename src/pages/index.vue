@@ -6,18 +6,7 @@
 
 <script setup lang="ts">
 import gsap from "gsap";
-import { useHead } from "@vueuse/head";
 const scrollToId = <Function>inject("scrollToId");
-
-useHead({
-  title: "EDX",
-  meta: [
-    {
-      name: `description`,
-      content: `Sua parceira estratégica na transformação digital`,
-    },
-  ],
-});
 
 const getParameterByName = (
   name: any,
