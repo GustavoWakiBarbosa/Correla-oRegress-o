@@ -109,7 +109,6 @@ function changeGraphich() {
   }));
   data.value.datasets[1].data = calculateBestFitLine(linhasNumber);
   chart.update();
-  console.log("vendo dicas", data.value.datasets);
 }
 
 function transformLines() {
@@ -178,7 +177,6 @@ watchEffect(() => {
 let mudancaInterna = false;
 
 watchEffect(() => {
-  console.log(linhas.value);
   if (numRows.value != 0) {
     const diff = numRows.value - linhas.value.length;
     let tempLinhas = [...linhas.value]; // Cria uma cópia de linhas.value
