@@ -261,7 +261,7 @@ watchEffect(() => {
                 placeholder=""
                 required
               />
-              <p class="text-edx-primary-50 mt-2">{{ estimate[2] }}</p>
+              <p class="text-ett-primary-50 mt-2">{{ estimate[2] }}</p>
             </div>
             <div>
               <label
@@ -277,7 +277,7 @@ watchEffect(() => {
                 placeholder=""
                 required
               />
-              <p class="text-edx-primary-50 mt-2">{{ estimate[3] }}</p>
+              <p class="text-ett-primary-50 mt-2">{{ estimate[3] }}</p>
             </div>
           </div>
         </form>
@@ -314,7 +314,7 @@ watchEffect(() => {
                 v-for="(coluna, index) in colunas"
                 :key="index"
                 scope="col"
-                class="text-center px-6 py-3 text-edx-primary-50"
+                class="text-center px-6 py-3 text-ett-primary-50"
               >
                 {{ coluna }}
               </th>
@@ -350,7 +350,7 @@ watchEffect(() => {
           </tbody>
         </table>
       </div>
-      <div class="p-4 md:w-[500px] max-h-[266px] bg-edx-primary-50 rounded-md">
+      <div class="p-4 md:w-[500px] max-h-[266px] bg-ett-primary-50 rounded-md">
         <canvas ref="canvasRef"></canvas>
       </div>
     </div>

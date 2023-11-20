@@ -15,27 +15,27 @@ module.exports = {
         ]
       },
       fontSize: {
-        'edx-display-3xl': ['4.5rem', '1.3'],
-        'edx-display-2xl': ['4rem', '1.3'],
-        'edx-display-lg': ['3.5rem', '1.3'],
-        'edx-display-md': ['2.8125rem', '1.3'],
-        'edx-display-sm': ['2.25rem', '1.3'],
-        'edx-headline-lg': ['2rem', '1.5'],
-        'edx-headline-md': ['1.75rem', '1.5'],
-        'edx-headline-sm': ['1.5rem', '1.5'],
-        'edx-title-lg': ['1.375rem', '1.5'],
-        'edx-title-md': ['1rem', '1.5'],
-        'edx-title-sm': ['0.875rem', '1.5'],
-        'edx-title-esm': ['0.6875rem', '1.5'],
-        'edx-label-lg': ['1.5rem', '1.5'],
-        'edx-label-md': ['1.25rem', '1.5'],
-        'edx-label-sm': ['1rem', '1.5'],
-        'edx-body-lg': ['1.5rem', '1.5'],
-        'edx-body-md': ['1.25rem', '1.5'],
-        'edx-body-sm': ['1rem', '1.5'],
+        'ett-display-3xl': ['4.5rem', '1.3'],
+        'ett-display-2xl': ['4rem', '1.3'],
+        'ett-display-lg': ['3.5rem', '1.3'],
+        'ett-display-md': ['2.8125rem', '1.3'],
+        'ett-display-sm': ['2.25rem', '1.3'],
+        'ett-headline-lg': ['2rem', '1.5'],
+        'ett-headline-md': ['1.75rem', '1.5'],
+        'ett-headline-sm': ['1.5rem', '1.5'],
+        'ett-title-lg': ['1.375rem', '1.5'],
+        'ett-title-md': ['1rem', '1.5'],
+        'ett-title-sm': ['0.875rem', '1.5'],
+        'ett-title-esm': ['0.6875rem', '1.5'],
+        'ett-label-lg': ['1.5rem', '1.5'],
+        'ett-label-md': ['1.25rem', '1.5'],
+        'ett-label-sm': ['1rem', '1.5'],
+        'ett-body-lg': ['1.5rem', '1.5'],
+        'ett-body-md': ['1.25rem', '1.5'],
+        'ett-body-sm': ['1rem', '1.5'],
       },
       colors: {
-        'edx-primary': { 
+        'ett-primary': { 
           50: '#e9ebfd',
           100: '#bac2f9',
           200: '#98a4f6',
@@ -47,7 +47,7 @@ module.exports = {
           800: '#122082',
           900: '#0d1863 '
         },
-        'edx-secondary': {
+        'ett-secondary': {
           50: '#e9e9e9',
           100: '#bbbaba',
           200: '#9a9898',
@@ -59,7 +59,7 @@ module.exports = {
           800: '#131112',
           900: '#0f0d0d '
         },
-        'edx-neutrals': {
+        'ett-neutrals': {
           50: '#fefefe',
           100: '#fbfbfb',
           200: '#f9f9f9',
@@ -71,7 +71,7 @@ module.exports = {
           800: '#858585',
           900: '#656566' 
         },
-        'edx-green': {
+        'ett-green': {
           50: '#f2f9e9',
           100: '#d8ebbb',
           200: '#c5e29b',
@@ -83,7 +83,7 @@ module.exports = {
           800: '#476a14',
           900: '#365110'
         },
-        'edx-warning': {
+        'ett-warning': {
           50: '#fef4ea',
           100: '#fddebf',
           200: '#fccea0',
@@ -95,7 +95,7 @@ module.exports = {
           800: '#88521a',
           900: '#683f14'
         },
-        'edx-error': {
+        'ett-error': {
           50: '#fbeaec',
           100: '#f3bdc3',
           200: '#ee9da5',
@@ -132,7 +132,7 @@ module.exports = {
   daisyui: {
     themes: [
       {
-        'edx': {
+        'ett': {
           'primary': '#2a4ddd',
           'primary-focus': '#2d56fb',
           'primary-content': '#ffffff',
