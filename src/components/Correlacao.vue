@@ -10,7 +10,7 @@ const infoEmpty = ref(true);
 const estimate = ref(["", "", "", ""]);
 const linhas = ref([]);
 const cftInclinacao = ref();
-const cftRegressao = ref();
+const cftCorrelacao = ref();
 const cftLinear = ref();
 const retaRegressao = ref();
 const x = ref([]);
@@ -154,7 +154,7 @@ function intercept() {
 
 watchEffect(() => {
   cftInclinacao.value = slope();
-  cftRegressao.value = correl();
+  cftCorrelacao.value = correl();
   cftLinear.value = intercept();
   if (isEmpty() == false && linhas.value.length > 0) {
     changeGraphich();
@@ -284,10 +284,10 @@ watchEffect(() => {
       </div>
       <div class="bg-[#111827] p-8 rounded-2xl mt-4">
         <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-          Coeficiente de Inclinação: {{ cftInclinacao }}
+          Coeficiente de Correlação: {{ cftCorrelacao }}
         </p>
         <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-          Coeficiente de Regressão: {{ cftRegressao }}
+          Coeficiente de Inclinação: {{ cftInclinacao }}
         </p>
         <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Coeficiente Linear: {{ cftLinear }}
